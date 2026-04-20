@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SPX Calendar Spread Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>SPX Calendar Dashboard</h1>
+      <div class="sub">Dealer gamma regime + term-structure edge for short-duration calendar spreads</div>
+    </div>
+    <div class="toolbar">
+      <span id="asof" class="asof">—</span>
+      <button id="refresh-btn">Refresh</button>
+    </div>
+  </header>
+
+  <section id="verdict" class="verdict loading">
+    <div class="pill" id="verdict-pill">LOADING</div>
+    <div class="headline" id="verdict-headline">Pulling chain from CBOE…</div>
+    <ul class="reasons" id="verdict-reasons"></ul>
+  </section>
+
+  <section class="tiles">
+    <div class="tile">
+      <div class="tile-label">Spot</div>
+      <div class="tile-value" id="tile-spot">—</div>
+      <div class="tile-sub" id="tile-flip">flip: —</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">Net GEX (per 1%)</div>
+      <div class="tile-value" id="tile-gex">—</div>
+      <div class="tile-sub" id="tile-gex-pct">percentile: insufficient history</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">IV Differential (front − back)</div>
+      <div class="tile-value" id="tile-iv">—</div>
+      <div class="tile-sub" id="tile-iv-detail">—</div>
+    </div>
+    <div class="tile">
+      <div class="tile-label">Walls</div>
+      <div class="tile-value small" id="tile-walls">—</div>
+      <div class="tile-sub">call = resistance, put = support</div>
+    </div>
+  </section>
+
+  <section class="charts">
+    <div class="card">
+      <div class="card-header">
+        <h2>Net Gamma by Strike</h2>
+        <div class="hint">Green = positive (attractor), red = negative (accelerator). Vertical line = spot. Dashed = flip.</div>
+      </div>
+      <canvas id="gex-chart" height="110"></canvas>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Calendar structure</h2>
+      </div>
+      <div class="trade-picker">
+        <label>Short leg
+          <select id="short-select"></select>
+        </label>
+        <label>Long leg
+          <select id="long-select"></select>
+        </label>
+        <div class="trade-desc" id="trade-desc">—</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>History (last 20 snapshots)</h2>
+        <div class="hint">Grows as you use the dashboard — one snapshot per day.</div>
+      </div>
+      <canvas id="history-chart" height="110"></canvas>
+      <div id="history-placeholder" class="placeholder" style="display:none">—</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Data: CBOE delayed quotes</span>
+    <span id="auto-refresh-note">auto-refresh every 5 min</span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
